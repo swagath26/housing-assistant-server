@@ -1,6 +1,8 @@
 from .models import Property, PropertyImage
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.core import serializers
+# from django.views.decorators import login_required
 from rest_framework import viewsets, filters, pagination
 from .serializers import PropertySerializer
 from .forms import PropertyForm
@@ -19,26 +21,71 @@ class PropertyFilter(FilterSet):
 
     class Meta:
         model=Property
-        fields=['size']
+        fields=['bedrooms', 'id']
 
 class PropertyViewSet(viewsets.ModelViewSet):
     queryset = Property.objects.all()
     serializer_class = PropertySerializer
-    pagination_class = StandardResultsSetPagination
+    # pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     filterset_class = PropertyFilter
-    search_fields = ['location', 'society', 'area_type']
-    ordering_fields = ['price', 'size']
+    search_fields = ['location', 'address', 'area_type']
+    ordering_fields = ['price', 'bedrooms']
 
-@ensure_csrf_cookie
+# def getProperty(request):
+#     queryset = Property.objects.all()
+#     data = serializers.serialize('json', queryset)
+#     return JsonResponse({'data':data})
+        
+# @login_required(login_url='/members/signin/')
+# @ensure_csrf_cookie
 def addProperty(request):
     if request.method == 'POST':
         form = PropertyForm(request.POST)
         if form.is_valid():
-            property = form.save()
+            property = form.save(commit=False)
+            property.owner = request.user
+            property.save()
             images = request.FILES.getlist('images')
             for image in images:
                 PropertyImage.objects.create(property=property, image=image)
             return JsonResponse({'success':True, 'message': "Property added successfully"})
         else:
             return JsonResponse({'success':False, 'errors': form.errors})
+        
+
+# @login_required(login_url='/members/signin/')
+@ensure_csrf_cookie
+def deleteProperty(request):
+    if request.method == 'POST':
+        property_id = request.POST.get("id")
+        property = Property.objects.filter(id=property_id).first()
+        if property:
+            if property.owner == request.user:
+                property.delete()
+                return JsonResponse({'success':True, 'message': "Property deleted successfully"})
+            else:
+                return JsonResponse({'success':False, 'errors': "You are not the owner of the property"})
+        else:
+            return JsonResponse({'success':False, 'errors': "Property does not exist"})
+        
+# @login_required(login_url='/members/signin/')
+@ensure_csrf_cookie
+def editProperty(request):
+    if request.method == 'POST':
+        property_id = request.POST.get("id")
+        property = Property.objects.filter(id=property_id).first()
+        if property:
+            if property.owner == request.user:
+                form = PropertyForm(request.POST)
+                if form.is_valid():
+                    property = form.save(commit=False)
+                    property.owner = request.user
+                    property.save()
+                    images = request.FILES.getlist('images')
+                    property.delete()
+                    return JsonResponse({'success':True, 'message': "Property updated successfully"})
+            else:
+                return JsonResponse({'success':False, 'errors': "You are not the owner of this property"})
+        else:
+            return JsonResponse({'success':False, 'errors': "Property does not exist"})

@@ -7,7 +7,7 @@ class PropertyImageSerializer(serializers.ModelSerializer):
         fields = ['image']
 
 class PropertySerializer(serializers.ModelSerializer):
-    image_files = PropertyImageSerializer(many=True)
+    images = PropertyImageSerializer(many=True)
     class Meta:
         model = Property
         fields = '__all__'

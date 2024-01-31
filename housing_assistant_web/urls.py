@@ -11,6 +11,7 @@ router.register('properties_list', PropertyViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('add/', addProperty, name = 'add'),
+    # path('get_list/', getProperty, name = 'get_list'),
     # path('members/', include('django.contrib.auth.urls')),
     path('members/', include('members.urls')),
 ]

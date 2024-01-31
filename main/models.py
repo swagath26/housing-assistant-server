@@ -1,23 +1,27 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Property(models.Model):
-    location = models.CharField(max_length=255)
-    society = models.CharField(max_length=255)
-    area_type = models.CharField(max_length=255)
-    availability = models.CharField(max_length=255)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    location = models.CharField(max_length=255, blank=False)
+    address = models.CharField(max_length=255, blank=False)
+    description = models.CharField(max_length=500, null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    size = models.CharField(max_length=255)
+    bedrooms = models.IntegerField()
     bathrooms = models.IntegerField()
-    balcony = models.IntegerField()
-    area = models.CharField(max_length=255)
+    balcony = models.BooleanField()
+    area = models.IntegerField(null=True, blank=True)
+    area_type = models.CharField(max_length=50, null=True, blank=True)
+    date_of_availability = models.DateField(null=True, blank=True)
+    ready_to_move = models.BooleanField()
  
     def __str__(self):
-        return self.price
+        return self.location
 
 def property_subfolder(instance, filename):
     property_id = instance.property.id
     return f'property_images/property_{property_id}/{filename}'
 
 class PropertyImage(models.Model):
-    property = models.ForeignKey(Property, related_name='image_files', on_delete=models.CASCADE)
+    property = models.ForeignKey(Property, related_name='images', on_delete=models.CASCADE)
     image = models.ImageField(upload_to=property_subfolder, blank=True, null=True)
