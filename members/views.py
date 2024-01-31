@@ -3,7 +3,14 @@ from django.contrib.auth import authenticate, login, logout
 # from django.contrib import messages
 from django.http import JsonResponse
 from .forms import RegisterForm
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+from django.middleware.csrf import get_token
+
+@csrf_protect
+def get_csrftoken(request):
+    token = get_token(request)
+    response = JsonResponse({'csrftoken':token})
+    return response
 
 def signin_user(request):
     if request.method == 'POST':
