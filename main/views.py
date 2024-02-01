@@ -79,12 +79,16 @@ def editProperty(request):
             if property.owner == request.user:
                 form = PropertyForm(request.POST)
                 if form.is_valid():
-                    property = form.save(commit=False)
-                    property.owner = request.user
-                    property.save()
+                    property_updated = form.save(commit=False)
+                    property_updated.owner = request.user
+                    property_updated.save()
                     images = request.FILES.getlist('images')
+                    for image in images:
+                        PropertyImage.objects.create(property=property_updated, image=image)
                     property.delete()
-                    return JsonResponse({'success':True, 'message': "Property updated successfully"})
+                    return JsonResponse({'success':True, 'messages': "Property updated successfully"})
+                else:
+                    return JsonResponse({'success':False, 'errors': form.errors})
             else:
                 return JsonResponse({'success':False, 'errors': "You are not the owner of this property"})
         else:
