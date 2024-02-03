@@ -24,4 +24,4 @@ def property_subfolder(instance, filename):
 
 class PropertyImage(models.Model):
     property = models.ForeignKey(Property, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=property_subfolder, blank=True, null=True)
+    image = models.ImageField(upload_to=property_subfolder)
