@@ -14,6 +14,8 @@ class Property(models.Model):
     area_type = models.CharField(max_length=50, null=True, blank=True)
     date_of_availability = models.DateField(null=True, blank=True)
     ready_to_move = models.BooleanField()
+    latitude = models.DecimalField(max_digits=10, decimal_places=5, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=10, decimal_places=5, null=True, blank=True)
  
     def __str__(self):
         return self.location

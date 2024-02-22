@@ -94,22 +94,22 @@ WSGI_APPLICATION = 'housing_assistant_web.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'postgresql_django',
-    #     'USER': 'swakkidi',
-    #     'PASSWORD': '662000',
-    #     'HOST': 'localhost',
-    #     'PORT': '5432',
-    # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'housing',
+        'NAME': 'postgresql_django',
         'USER': 'swakkidi',
-        'PASSWORD': '06062000',
-        'HOST': 'housing-database.cfeqs6q8iamu.eu-north-1.rds.amazonaws.com',
+        'PASSWORD': '662000',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'housing',
+    #     'USER': 'swakkidi',
+    #     'PASSWORD': '06062000',
+    #     'HOST': 'housing-database.cfeqs6q8iamu.eu-north-1.rds.amazonaws.com',
+    #     'PORT': '5432',
+    # }
 }
 
 # SECURE_SSL_REDIRECT = False

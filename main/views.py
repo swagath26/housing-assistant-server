@@ -9,13 +9,15 @@ from .forms import PropertyForm
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, NumberFilter
 
 class StandardResultsSetPagination(pagination.PageNumberPagination):
-    page_size = 20
-    page_size_query_param = 'page_size'
-    max_page_size = 100
+    page_size = 50
 
 class PropertyFilter(FilterSet):
     min_price = NumberFilter(field_name="price", lookup_expr='gte')
     max_price = NumberFilter(field_name="price", lookup_expr='lte')
+    min_lat = NumberFilter(field_name="latitude", lookup_expr='gte')
+    max_lat = NumberFilter(field_name="latitude", lookup_expr='lte')
+    min_lng = NumberFilter(field_name="longitude", lookup_expr='gte')
+    max_lng = NumberFilter(field_name="longitude", lookup_expr='lte')
     min_area = NumberFilter(field_name='area', lookup_expr='gte')
     max_area = NumberFilter(field_name='area', lookup_expr='lte')
 
@@ -26,7 +28,7 @@ class PropertyFilter(FilterSet):
 class PropertyViewSet(viewsets.ModelViewSet):
     queryset = Property.objects.all()
     serializer_class = PropertySerializer
-    # pagination_class = StandardResultsSetPagination
+    pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     filterset_class = PropertyFilter
     search_fields = ['location', 'address', 'area_type']
