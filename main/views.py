@@ -6,11 +6,18 @@ from django.core import serializers
 from rest_framework import viewsets, filters, pagination
 from .serializers import PropertySerializer
 from .forms import PropertyForm
-from django_filters.rest_framework import DjangoFilterBackend, FilterSet, NumberFilter, CharFilter
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet, NumberFilter, CharFilter, BaseInFilter
 
 class StandardResultsSetPagination(pagination.PageNumberPagination):
+    page_size_query_param = 'page_size'
     page_size = 50
 
+class NumberInFilter(BaseInFilter, NumberFilter):
+    pass
+
+class CharInFilter(BaseInFilter, CharFilter):
+    pass
+    
 class PropertyFilter(FilterSet):
     min_price = NumberFilter(field_name="price", lookup_expr='gte')
     max_price = NumberFilter(field_name="price", lookup_expr='lte')
@@ -22,25 +29,13 @@ class PropertyFilter(FilterSet):
     max_area = NumberFilter(field_name='area', lookup_expr='lte')
     min_bed = NumberFilter(field_name='bedrooms', lookup_expr='gte')
     min_bath = NumberFilter(field_name='bathrooms', lookup_expr='gte')
-    bedrooms = NumberFilter(field_name='bedrooms', lookup_expr='in', method='filter_by_bedrooms')
-    def filter_by_bedrooms(self, queryset, value):
-        try:
-            values = [int(v) for v in value.split(',')]
-            return queryset.filter(bedrooms__in=values)
-        except ValueError as e:
-        # Handle the case where the values cannot be converted to integers
-        # Log the error or return an empty queryset, depending on your use case
-            return queryset.none()
-    baths = NumberFilter(field_name='bathrooms', lookup_expr='in', method='filter_by_bathrooms')
-    def filter_by_bathrooms(self, queryset, value):
-        return queryset.filter(bathrooms__in=(value.split(',')))
-    areatype = CharFilter(field_name='area_type', lookup_expr='in', method='filter_by_areatype')
-    def filter_by_areatype(self, queryset, value):
-        return queryset.filter(areatype__in=value.split(','))
+    beds = NumberInFilter(field_name='bedrooms', lookup_expr='in')
+    type = CharInFilter(field_name='area_type', lookup_expr='in')
 
     class Meta:
         model=Property
-        fields=['area_type', 'bedrooms', 'bathrooms']
+        fields=['area_type','bedrooms','bathrooms', 'price']
+
 
 class PropertyViewSet(viewsets.ModelViewSet):
     queryset = Property.objects.all()
