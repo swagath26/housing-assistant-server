@@ -58,12 +58,16 @@ def addProperty(request):
         form = PropertyForm(request.POST)
         if form.is_valid():
             property = form.save(commit=False)
-            property.owner = request.user
-            property.save()
-            images = request.FILES.getlist('images')
-            for image in images:
-                PropertyImage.objects.create(property=property, image=image)
-            return JsonResponse({'success':True, 'message': "Property added successfully"})
+            user = request.user
+            if user is not None:
+                property.owner = user
+                property.save()
+                images = request.FILES.getlist('images')
+                for image in images:
+                    PropertyImage.objects.create(property=property, image=image)
+                return JsonResponse({'success':True, 'message': "Property added successfully"})
+            else:
+                return JsonResponse({'success':False, 'errors': 'User not authenticated'})
         else:
             return JsonResponse({'success':False, 'errors': form.errors})
         
