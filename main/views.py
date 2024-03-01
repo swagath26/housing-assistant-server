@@ -2,7 +2,7 @@ from .models import Property, PropertyImage
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core import serializers
-# from django.views.decorators import login_required
+from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters, pagination
 from .serializers import PropertySerializer
 from .forms import PropertyForm
@@ -51,8 +51,8 @@ class PropertyViewSet(viewsets.ModelViewSet):
 #     data = serializers.serialize('json', queryset)
 #     return JsonResponse({'data':data})
         
-# @login_required(login_url='/members/signin/')
-# @ensure_csrf_cookie
+@login_required
+@ensure_csrf_cookie
 def addProperty(request):
     if request.method == 'POST':
         form = PropertyForm(request.POST)
