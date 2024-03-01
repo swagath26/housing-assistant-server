@@ -45,11 +45,6 @@ class PropertyViewSet(viewsets.ModelViewSet):
     filterset_class = PropertyFilter
     search_fields = ['location', 'address', 'area_type']
     ordering_fields = ['price', 'bedrooms']
-
-# def getProperty(request):
-#     queryset = Property.objects.all()
-#     data = serializers.serialize('json', queryset)
-#     return JsonResponse({'data':data})
         
 @login_required
 @ensure_csrf_cookie
@@ -73,41 +68,41 @@ def addProperty(request):
         
 
 # @login_required(login_url='/members/signin/')
-@ensure_csrf_cookie
-def deleteProperty(request):
-    if request.method == 'POST':
-        property_id = request.POST.get("id")
-        property = Property.objects.filter(id=property_id).first()
-        if property:
-            if property.owner == request.user:
-                property.delete()
-                return JsonResponse({'success':True, 'message': "Property deleted successfully"})
-            else:
-                return JsonResponse({'success':False, 'errors': "You are not the owner of the property"})
-        else:
-            return JsonResponse({'success':False, 'errors': "Property does not exist"})
+# @ensure_csrf_cookie
+# def deleteProperty(request):
+#     if request.method == 'POST':
+#         property_id = request.POST.get("id")
+#         property = Property.objects.filter(id=property_id).first()
+#         if property:
+#             if property.owner == request.user:
+#                 property.delete()
+#                 return JsonResponse({'success':True, 'message': "Property deleted successfully"})
+#             else:
+#                 return JsonResponse({'success':False, 'errors': "You are not the owner of the property"})
+#         else:
+#             return JsonResponse({'success':False, 'errors': "Property does not exist"})
         
 # @login_required(login_url='/members/signin/')
-@ensure_csrf_cookie
-def editProperty(request):
-    if request.method == 'POST':
-        property_id = request.POST.get("id")
-        property = Property.objects.filter(id=property_id).first()
-        if property:
-            if property.owner == request.user:
-                form = PropertyForm(request.POST)
-                if form.is_valid():
-                    property_updated = form.save(commit=False)
-                    property_updated.owner = request.user
-                    property_updated.save()
-                    images = request.FILES.getlist('images')
-                    for image in images:
-                        PropertyImage.objects.create(property=property_updated, image=image)
-                    property.delete()
-                    return JsonResponse({'success':True, 'messages': "Property updated successfully"})
-                else:
-                    return JsonResponse({'success':False, 'errors': form.errors})
-            else:
-                return JsonResponse({'success':False, 'errors': "You are not the owner of this property"})
-        else:
-            return JsonResponse({'success':False, 'errors': "Property does not exist"})
+# @ensure_csrf_cookie
+# def editProperty(request):
+#     if request.method == 'POST':
+#         property_id = request.POST.get("id")
+#         property = Property.objects.filter(id=property_id).first()
+#         if property:
+#             if property.owner == request.user:
+#                 form = PropertyForm(request.POST)
+#                 if form.is_valid():
+#                     property_updated = form.save(commit=False)
+#                     property_updated.owner = request.user
+#                     property_updated.save()
+#                     images = request.FILES.getlist('images')
+#                     for image in images:
+#                         PropertyImage.objects.create(property=property_updated, image=image)
+#                     property.delete()
+#                     return JsonResponse({'success':True, 'messages': "Property updated successfully"})
+#                 else:
+#                     return JsonResponse({'success':False, 'errors': form.errors})
+#             else:
+#                 return JsonResponse({'success':False, 'errors': "You are not the owner of this property"})
+#         else:
+#             return JsonResponse({'success':False, 'errors': "Property does not exist"})

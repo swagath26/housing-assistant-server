@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from main.models import Property
 import random
-import requests
+# import requests
 
 class Command(BaseCommand):
     help = "Update addresses and locations for property"
@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def handle(self, *args, **option):
 
         # def get_nearby_places(lat, lng, radius_km, keywords=None):
-        #     api_key = "AIzaSyBo-ItKuuol693o7N6HX0VfzF1n3rvBmRo"
+        #     api_key = ""
         #     base_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
         #     params = {
         #         "location": f"{lat},{lng}",
