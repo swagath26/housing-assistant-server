@@ -1,7 +1,6 @@
 from .models import Property, PropertyImage
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, filters, pagination
 from .serializers import PropertySerializer

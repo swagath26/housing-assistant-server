@@ -3,6 +3,7 @@ from main.models import Property
 from django.contrib.auth.models import User
 import pandas as pd
 import os
+import random
 
 class Command(BaseCommand):
     help = 'Load data into the database'
@@ -18,12 +19,41 @@ class Command(BaseCommand):
         df = pd.read_csv(file_path)
         df.dropna(inplace=True)
         
+        random_addresses = [
+            'MG Road West',
+            'South Servaigarar street', 
+            'Ashok Nagar road no 1 siripuram', 
+            'Cantonment Board Dehu Road', 
+            'Omkar chattar farm houses', 
+            'Puthen Purackal family houses', 
+            'PVMR HOUSES',
+            'Near Lakewood Village', 
+            "3rd Cross Road, Vaishnavi Nilayam",
+            "5th Avenue, Golden Heights",
+            "Sunshine Boulevard, Palm Grove",
+            "Green Valley, Laurel Lane",
+            "Orchid Place, Blossom Street",
+            "Silver Crest, Maple Avenue",
+            "Royal Gardens, Jasmine Lane",
+            "Emerald Court, Cedar Lane",
+            "Ivory Towers, Oak Street",
+            "Tranquil Terrace, Lily Lane",
+            "Coral Springs, Pine Grove",
+            'Dargah road East', 
+            'Y.V.STREET North',  
+            'Lion Empire Street', 
+            'The House Design Hub', 
+            'AP Transport Unit Office Madanapalle', 
+            'Eat Street Goaves', 
+            'Fassion Street boutique', 
+            'Bajaj Auto (SRR Motors, NH 7 Road)'
+        ]
         
         for index, row in df.iterrows():
             Property.objects.create(
                 owner = User.objects.get(username = 'admin'),
-                location = 'notLoaded',
-                address = 'notLoaded',
+                location = 'Random Location',
+                address = random.choice(random_addresses),
                 description = row['description'],
                 price = row['price'],
                 bedrooms = row['bedrooms'],

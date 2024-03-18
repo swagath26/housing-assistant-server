@@ -1,30 +1,17 @@
-from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
-# from django.contrib import messages
 from django.http import JsonResponse
 from .forms import RegisterForm
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.middleware.csrf import get_token
-import json
-# from .serializers import UserSerializer
-# from rest_framework import viewsets
 from django.contrib.auth.models import User
 
-# class UserViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-
 def get_user(request):
-    # user_id = request.GET.get('userid')
     user = request.user
-    # if user_id == user.id:
-        # requested_user = User.objects.get(pk=user_id)
     user_details = {
         "first_name": user.first_name,
         "last_name": user.last_name
     }
     return JsonResponse(user_details)
-
 
 @csrf_protect
 def get_csrftoken(request):
@@ -32,6 +19,18 @@ def get_csrftoken(request):
     response = JsonResponse({'csrftoken':token})
     return response
 
+def check_username(request):
+    if request.method == 'GET':
+        username = request.GET.get('username', None)
+        if username is not None:
+            try:
+                User.objects.get(username=username)
+                availability = False
+            except User.DoesNotExist:
+                availability = True
+            return JsonResponse({'availability':availability})
+        else:
+            return JsonResponse({'availability':False})
 
 def signin_user(request):
     if request.method == 'POST':
@@ -42,7 +41,7 @@ def signin_user(request):
         if user is not None:
             login(request, user)
             response = JsonResponse({
-                'success':True, 
+                'success': True, 
                 'messages': "Signed in successfully",
                 })
             duration = 600
@@ -52,8 +51,15 @@ def signin_user(request):
             response.set_cookie('username', user.username, max_age=duration)
             return response
         else:
-            return JsonResponse({'success':False, 'messages': "Invalid username or password!"})
-
+            try:
+                User.objects.get(username=username)
+                availability = True
+            except User.DoesNotExist:
+                availability = False
+                return JsonResponse({'success':False, 'errors': "username"})
+            if(availability):
+                return JsonResponse({'success':False, 'errors': "password"})
+    
 def signout_user(request):
     logout(request)
     response = JsonResponse({'success':True, 'messages': "Signed out successfully"})
@@ -82,8 +88,3 @@ def signup_user(request):
             return response
         else:
             return JsonResponse({'success':False, 'errors': form.errors})
-
-def forgot_password(request):
-    pass
-
-# remember me
