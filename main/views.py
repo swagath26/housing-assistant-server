@@ -29,11 +29,11 @@ class PropertyFilter(FilterSet):
     min_bed = NumberFilter(field_name='bedrooms', lookup_expr='gte')
     min_bath = NumberFilter(field_name='bathrooms', lookup_expr='gte')
     beds = NumberInFilter(field_name='bedrooms', lookup_expr='in')
-    type = CharInFilter(field_name='area_type', lookup_expr='in')
+    type = CharInFilter(field_name='home_type', lookup_expr='in')
 
     class Meta:
         model=Property
-        fields=['area_type','bedrooms','bathrooms', 'price']
+        fields=['home_type','bedrooms','bathrooms', 'price']
 
 
 class PropertyViewSet(viewsets.ModelViewSet):
@@ -42,7 +42,7 @@ class PropertyViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     filterset_class = PropertyFilter
-    search_fields = ['location', 'address', 'area_type']
+    search_fields = ['location', 'address', 'home_type']
     ordering_fields = ['price', 'bedrooms']
         
 @login_required
@@ -64,44 +64,3 @@ def addProperty(request):
                 return JsonResponse({'success':False, 'errors': 'User not authenticated'})
         else:
             return JsonResponse({'success':False, 'errors': form.errors})
-        
-
-# @login_required(login_url='/members/signin/')
-# @ensure_csrf_cookie
-# def deleteProperty(request):
-#     if request.method == 'POST':
-#         property_id = request.POST.get("id")
-#         property = Property.objects.filter(id=property_id).first()
-#         if property:
-#             if property.owner == request.user:
-#                 property.delete()
-#                 return JsonResponse({'success':True, 'message': "Property deleted successfully"})
-#             else:
-#                 return JsonResponse({'success':False, 'errors': "You are not the owner of the property"})
-#         else:
-#             return JsonResponse({'success':False, 'errors': "Property does not exist"})
-        
-# @login_required(login_url='/members/signin/')
-# @ensure_csrf_cookie
-# def editProperty(request):
-#     if request.method == 'POST':
-#         property_id = request.POST.get("id")
-#         property = Property.objects.filter(id=property_id).first()
-#         if property:
-#             if property.owner == request.user:
-#                 form = PropertyForm(request.POST)
-#                 if form.is_valid():
-#                     property_updated = form.save(commit=False)
-#                     property_updated.owner = request.user
-#                     property_updated.save()
-#                     images = request.FILES.getlist('images')
-#                     for image in images:
-#                         PropertyImage.objects.create(property=property_updated, image=image)
-#                     property.delete()
-#                     return JsonResponse({'success':True, 'messages': "Property updated successfully"})
-#                 else:
-#                     return JsonResponse({'success':False, 'errors': form.errors})
-#             else:
-#                 return JsonResponse({'success':False, 'errors': "You are not the owner of this property"})
-#         else:
-#             return JsonResponse({'success':False, 'errors': "Property does not exist"})
