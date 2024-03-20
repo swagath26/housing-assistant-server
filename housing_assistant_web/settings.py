@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.7', '13.51.169.65', 'ec2-13-51-169-65.eu-north-1.compute.amazonaws.com']
 
@@ -52,21 +52,10 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
+CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
-]
-
-CORS_ALLOW_METHODS = [
-    'GET',
-    'POST',
-]
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'content-type',
-    'authorization',
 ]
 
 ROOT_URLCONF = 'housing_assistant_web.urls'
@@ -102,27 +91,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432',
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'housing',
-    #     'USER': 'swakkidi',
-    #     'PASSWORD': '06062000',
-    #     'HOST': 'housing-database.cfeqs6q8iamu.eu-north-1.rds.amazonaws.com',
-    #     'PORT': '5432',
-    # }
 }
-
-# SECURE_SSL_REDIRECT = False
-# LOGGING = {
-# }
-
-# SECURE_BROWSER_XSS_FILTER = False
-# SECURE_CONTENT_TYPE_NOSNIFF = False
-
-# SESSION_COOKIE_SECURE = False
-# CSRF_COOKIE_SECURE = False
-
-# X_FRAME_OPTIONS = 'DENY'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
