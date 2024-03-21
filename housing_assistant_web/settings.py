@@ -56,7 +56,7 @@ MIDDLEWARE = [
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
-    'https://housing-demo.netlify.app/'
+    'https://housing-demo.netlify.app'
 ]
 
 ROOT_URLCONF = 'housing_assistant_web.urls'
