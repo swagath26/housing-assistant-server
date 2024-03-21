@@ -13,7 +13,7 @@ def get_user(request):
     }
     return JsonResponse(user_details)
 
-@csrf_protect
+# @csrf_protect
 def get_csrftoken(request):
     token = get_token(request)
     response = JsonResponse({'csrftoken':token})
