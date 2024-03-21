@@ -26,7 +26,7 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.7', '13.51.169.65', 'ec2-13-51-169-65.eu-north-1.compute.amazonaws.com', 'demo-housing.netlify.app']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.7', '13.51.169.65', 'ec2-13-51-169-65.eu-north-1.compute.amazonaws.com', 'housing-demo.netlify.app']
 
 # Application definition
 
@@ -56,7 +56,7 @@ MIDDLEWARE = [
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
-    'https://demo-housing.netlify.app'
+    'https://housing-demo.netlify.app/'
 ]
 
 ROOT_URLCONF = 'housing_assistant_web.urls'
