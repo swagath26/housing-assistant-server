@@ -18,7 +18,7 @@ class PropertySerializer(serializers.ModelSerializer):
     user_last_name = serializers.CharField(source='owner.last_name', read_only=True)
     class Meta:
         model = Property
-        fields = ['location', 'address', 'description', 'price', 'bedrooms', 'bathrooms', 
+        fields = ['id', 'location', 'address', 'description', 'price', 'bedrooms', 'bathrooms', 
                   'balcony', 'area', 'home_type', 'images', 'user_first_name', 'user_last_name', 'latitude', 'longitude']
         read_only_fields = ['owner']
 
