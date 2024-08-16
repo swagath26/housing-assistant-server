@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from main.models import Property
 
 class Command(BaseCommand):
-    help = 'Delete data into the database'
+    help = 'Delete data from the database'
 
     def handle(self, *args, **option):
 

@@ -14,7 +14,7 @@ class Property(models.Model):
     home_type = models.CharField(max_length=50, null=True, blank=True)
     latitude = models.DecimalField(max_digits=10, decimal_places=5, null=True, blank=True)
     longitude = models.DecimalField(max_digits=10, decimal_places=5, null=True, blank=True)
- 
+
     def __str__(self):
         return self.location
 
@@ -25,3 +25,7 @@ def property_subfolder(instance, filename):
 class PropertyImage(models.Model):
     property = models.ForeignKey(Property, related_name='images', on_delete=models.CASCADE)
     image = models.ImageField(upload_to=property_subfolder)
+
+# class FavouriteProperty(models.Model):
+#     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+#     property = models.ForeignKey(Property, on_delete=models.CASCADE)

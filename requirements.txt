@@ -9,4 +9,4 @@ Pillow
 psycopg2-binary
 python-decouple
 # googlemaps
-geopy
+# geopy

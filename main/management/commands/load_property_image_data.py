@@ -13,8 +13,8 @@ class Command(BaseCommand):
         base_dir = settings.BASE_DIR
         images_folder = os.path.join(base_dir, 'main/data/Properties_images')
         image_files = [f for f in os.listdir(images_folder) if os.path.isfile(os.path.join(images_folder, f))]
- 
-        for property_instance in Property.objects.all()[:1000]:
+
+        for property_instance in Property.objects.all()[:10]:
             selected_images = random.sample(image_files, random.randint(3,8))
             for i, image_file in enumerate(selected_images):
                 image_path = os.path.join(images_folder, image_file)

@@ -62,7 +62,7 @@ class Command(BaseCommand):
             "Unwind in style in this urban loft apartment, with exposed brick walls, industrial-chic furnishings, and skyline views creating a hip and vibrant downtown living experience.",
         ]
 
-        
+
         for index, row in df.iterrows():
             Property.objects.create(
                 owner = User.objects.get(username = 'admin'),
